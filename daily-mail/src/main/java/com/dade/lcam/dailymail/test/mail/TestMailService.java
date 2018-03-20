@@ -1,5 +1,8 @@
 package com.dade.lcam.dailymail.test.mail;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.mail.*;
@@ -10,14 +13,20 @@ import javax.mail.internet.MimeMultipart;
 import java.util.Date;
 import java.util.Properties;
 
+@Service
+@PropertySource("classpath:person.properties")
 public class TestMailService {
 
     public static final String SMTPSERVER = "smtp.163.com";
     public static final String SMTPPORT = "465";
-    public static final String ACCOUT = "wojiushizzq@163.com";
-    public static final String PWD = "zzq19930524";
 
-    public static void testSendEmail(String subJect, String context) throws Exception {
+    @Value("${person.account}")
+    public String ACCOUT;
+
+    @Value("${person.pwd}")
+    public String PWD;
+
+    public void testSendEmail(String subJect, String context) throws Exception {
 
         if (StringUtils.isEmpty(subJect) || StringUtils.isEmpty(context)){
             return;
@@ -62,7 +71,7 @@ public class TestMailService {
 
     }
 
-    public static void testSendEmptyEmail() throws Exception {
+    public void testSendEmptyEmail() throws Exception {
         // 创建邮件配置
         Properties props = new Properties();
         props.setProperty("mail.transport.protocol", "smtp"); // 使用的协议（JavaMail规范要求）
@@ -90,7 +99,7 @@ public class TestMailService {
     }
 
 
-    public static MimeMessage createEmail(Session session) throws Exception {
+    public MimeMessage createEmail(Session session) throws Exception {
         // 根据会话创建邮件
         MimeMessage msg = new MimeMessage(session);
         // address邮件地址, personal邮件昵称, charset编码方式

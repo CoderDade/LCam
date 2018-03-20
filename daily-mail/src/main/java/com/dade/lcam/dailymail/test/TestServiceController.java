@@ -2,6 +2,7 @@ package com.dade.lcam.dailymail.test;
 
 import com.dade.lcam.dailymail.test.crawel.TestCrawelService;
 import com.dade.lcam.dailymail.test.mail.TestMailService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,12 +20,15 @@ public class TestServiceController {
 //        return "success!";
 //    }
 
+    @Autowired
+    TestMailService testMailService;
+
     @RequestMapping("send/context")
     public String testSendContext(){
         try {
             String subject = "Daily News";
 //            String content = TestCrawelService.crawelInfo();
-            TestMailService.testSendEmail(subject, "test");
+            testMailService.testSendEmail(subject, "test");
         } catch (Exception e) {
             return "fail to send mail";
         }
