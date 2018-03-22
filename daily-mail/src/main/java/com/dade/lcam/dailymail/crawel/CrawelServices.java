@@ -1,5 +1,6 @@
 package com.dade.lcam.dailymail.crawel;
 
+import com.dade.lcam.dailymail.crawel.dal.NewsDAO;
 import com.dade.lcam.dailymail.log.LogUtil;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
@@ -13,6 +14,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
@@ -31,24 +33,47 @@ public class CrawelServices {
     @Value("${person.url}")
     private String url;
 
+    @Autowired
+    NewsDAO newsDAO;
+
     public void crawelInfo() {
         try {
             String result = crawelByUrl(url);
             if (StringUtils.isBlank(result)){
                 return;
             }
-            List<String> infos = Lists.newArrayList();
+            List<NewsEntity> infos = Lists.newArrayList();
             Document parse = Jsoup.parse(result);
             Elements elements = parse.getElementsByTag("a");
             Iterator<Element> iterator = elements.iterator();
             while (iterator.hasNext()){
                 Element next = iterator.next();
-                infos.add(next.attr("href")+"|"+next.text());
+                NewsEntity news = getNewsByString(next.attr("href"), next.text());
+                if (news != null){
+                    infos.add(news);
+                }
             }
-            LogUtil.plainFile(infos);
+            newsDAO.insertIntoNews(infos);
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    private NewsEntity getNewsByString(String link, String title){
+        if (StringUtils.isBlank(link) || StringUtils.isBlank(title)){
+            return null;
+        }
+
+        if (title.equals("查看详情 >")){
+            return null;
+        }
+
+        // todo those could be detach
+        // this means that i want article only
+        if (link.startsWith("/s")){
+            return NewsEntity.builder().link(link).title(title).build();
+        }
+        return null;
     }
 
     private String crawelByUrl(String url) throws IOException {

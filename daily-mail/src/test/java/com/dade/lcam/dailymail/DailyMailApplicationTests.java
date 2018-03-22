@@ -61,6 +61,12 @@ public class DailyMailApplicationTests {
     }
 
     @Test
+    public void testStartWith(){
+        String str = "/s?id=1595";
+        System.out.println(str.startsWith("/s"));
+    }
+
+    @Test
     public void testHtml(){
         String s = HtmlUtils.htmlEscape("<div>hello world</div><p>&nbsp;</p>");
         System.out.println(s);
