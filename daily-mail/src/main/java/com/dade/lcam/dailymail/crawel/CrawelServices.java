@@ -71,7 +71,7 @@ public class CrawelServices {
         // todo those could be detach
         // this means that i want article only
         if (link.startsWith("/s")){
-            return NewsEntity.builder().link(link).title(title).build();
+            return NewsEntity.builder().link(url+link).title(title).build();
         }
         return null;
     }

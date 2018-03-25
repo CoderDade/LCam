@@ -11,7 +11,7 @@ import java.util.Set;
 public interface NewsDAO {
 
     @Select("<script>" +
-            "select distinct link, title, createTime from qp_news " +
+            "select distinct link, title, createTime from qp_news order by createTime desc limit 10 " +
             "</script>")
     List<NewsEntity> queryAllNews();
 

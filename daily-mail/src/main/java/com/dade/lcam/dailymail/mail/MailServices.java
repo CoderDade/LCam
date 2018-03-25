@@ -25,7 +25,7 @@ public class MailServices {
     @Value("${person.pwd}")
     private String password; //授权码
 
-    @Value("${person.account}")
+    @Value("${person.replayAddress}")
     private String replayAddress; //你的邮箱
 
     public void sendHtmlMail(String html) throws MessagingException, UnsupportedEncodingException {
@@ -44,8 +44,8 @@ public class MailServices {
 
     }
 
+    // todo send TextMail
     public void sendTextMail(String text){
-
     }
 
 
@@ -67,13 +67,13 @@ public class MailServices {
 
         Message message = new MimeMessage(session);
         //消息发送的主题
-        message.setSubject("JoeChang's Test Mail");
+        message.setSubject("Hello Joe Chang");
         //接受消息的人
         message.setReplyTo(InternetAddress.parse(replayAddress));
         //消息的发送者
         message.setFrom(new InternetAddress(p.getProperty("mail.smtp.user"),"JoeChang"));
         // 创建邮件的接收者地址，并设置到邮件消息中
-        message.setRecipient(Message.RecipientType.TO,new InternetAddress(formName));
+        message.setRecipient(Message.RecipientType.TO,new InternetAddress(replayAddress));
         // 消息发送的时间
         message.setSentDate(new Date());
 
