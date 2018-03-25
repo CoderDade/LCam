@@ -24,6 +24,10 @@ public class AlaphTests {
     NewsDAO newsDAO;
 
     @Test
+    public void contextLoads() {
+    }
+
+    @Test
     public void testMyBatisRun(){
         List<NewsEntity> news = newsDAO.queryAllNews();
         news.forEach(System.out::println);

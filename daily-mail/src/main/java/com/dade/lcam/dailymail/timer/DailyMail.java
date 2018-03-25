@@ -29,10 +29,10 @@ public class DailyMail {
 
     SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-    @Scheduled(fixedRate = 5000)
-    public void timerRate() {
-        System.out.println(dateFormat.format(new Date()));
-    }
+//    @Scheduled(fixedRate = 5000)
+//    public void timerRate() {
+//        System.out.println(dateFormat.format(new Date()));
+//    }
 
     @Scheduled(cron = "0 0 8 * * ?")
     public void crawelInfoSchduled(){
